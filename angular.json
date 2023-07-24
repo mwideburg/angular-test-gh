@@ -21,7 +21,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": ".",
-            "deployUrl": "https://github.com/mwideburg/angular-test-gh",
+            "deployUrl": "https://github.com/mwideburg/angular-test-gh/",
             "outputPath": "docs/my-angular-app",
             "index": "src/index.html",
             "main": "src/main.ts",
