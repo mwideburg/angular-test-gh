@@ -21,8 +21,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "baseHref": ".",
-            "deployUrl": "https://github.com/mwideburg/angular-test-gh/",
-            "outputPath": "docs/my-angular-app",
+            "outputPath": "dist/my-angular-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -33,6 +32,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -101,10 +101,14 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
