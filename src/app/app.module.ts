@@ -9,8 +9,11 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { CardDetailsComponent } from './card-details/card-details.component';
+
 @NgModule({
-  declarations: [AppComponent, CardComponent, SearchBarComponent],
+  declarations: [AppComponent, CardComponent, SearchBarComponent, CardDetailsComponent],
   imports: [
     BrowserModule,
     MatCardModule,
@@ -18,6 +21,7 @@ import { FormsModule } from '@angular/forms';
     MatGridListModule,
     HttpClientModule,
     FormsModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,0 +1,20 @@
+<div class="container mx-auto px-4">
+  <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-4"
+    (click)="goBack()">Back</button>
+  <div class="mx-auto">
+    <!-- Check if media is an image or video -->
+    <div *ngIf="cardData.mediaType === 'image'; else videoBlock">
+      <img class="w-full object-cover rounded" [src]="cardData.mediaUrl" alt="Card media">
+    </div>
+    <ng-template #videoBlock>
+      <video controls autoplay class="w-full rounded" [src]="cardData.mediaUrl"></video>
+    </ng-template>
+
+    <div class="mt-4">
+      <h1 class="text-2xl font-bold">{{ cardData.title }}</h1>
+      <p class="mt-2 text-sm text-gray-500">Created at: {{ cardData.createdAt }}</p>
+      <p class="mt-2 text-sm text-gray-500">Center: {{ cardData.center }}</p>
+      <p class="mt-4">{{ cardData.description }}</p>
+    </div>
+  </div>
+</div>

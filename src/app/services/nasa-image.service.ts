@@ -8,12 +8,34 @@ import { Observable, BehaviorSubject } from 'rxjs';
 export class NasaImageService {
   private API_URL = 'https://images-api.nasa.gov';
   private imagesSource = new BehaviorSubject<any>({});
+  pictureOfTheDay = new BehaviorSubject<any>({});
+  private collection = new BehaviorSubject<any>({});
   currentImages = this.imagesSource.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getImage(searchTerm: string): Observable<any> {
     return this.http.get(`${this.API_URL}/search?q=${searchTerm}`);
+  }
+
+  getPictureOfTheDay(): Observable<any> {
+    return this.http.get("https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY")
+
+  }
+
+  getCollection(dataUrl: string): Observable<any> {
+    console.log("HELLO DATA", dataUrl)
+    return this.http.get(dataUrl);
+  }
+
+  getAssetById(id: string): Observable<any> {
+    console.log(id)
+    return this.http.get(`${this.API_URL}/asset/${id}`)
+  }
+
+  changeCollection(collection: any) {
+    console.log("HELLO WORLD")
+    this.collection.next(collection)
   }
 
   changeImages(images: any) {
