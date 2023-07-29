@@ -1,23 +1,27 @@
-<div class="bg-white sm:py-5">
-  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+<div class="bg-white h-full">
+  <!-- <div class="h-3/5 w-full flex items-center justify-center relative">
+    <img [src]="imageUrl" class="object-cover w-full h-full absolute z-10" />
+    
+  </div> -->
+  <div class="mx-auto max-w-7xl py-10 px-6 lg:px-8">
     <div class="mx-auto max-w-2xl lg:mx-0">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-        Nasa Search
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-10xl">
+        Universal Search
       </h1>
       <p class="mt-2 text-lg leading-8 text-gray-600">
-        Search our universe, in a simple way.
+        Search NASA's media archives, and explore the history off ouor discoveries.
       </p>
     </div>
     <!-- Include the card component here -->
-    <div class="mt-5 border-t border-gray-200 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none">
-    
+    <div
+      class="mt-5 border-t border-gray-200 sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none"
+    >
       <div *ngIf="showSearchBar">
         <!-- Include the search bar component here -->
         <app-search-bar></app-search-bar>
       </div>
 
-    <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
-

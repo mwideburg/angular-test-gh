@@ -14,8 +14,20 @@ export class NasaImageService {
 
   constructor(private http: HttpClient) { }
 
-  getImage(searchTerm: string): Observable<any> {
-    return this.http.get(`${this.API_URL}/search?q=${searchTerm}`);
+  getImage(searchTerm: string, mediaType: string, searchType: string): Observable<any> {
+    let url = `${this.API_URL}/search?`
+    if(searchType === "keywords"){
+        const keywoords = searchTerm.split(" ").join(",")
+        url = url + `keywords=${keywoords}`
+    }
+    if(searchType === "q"){
+        url = url + `q=${searchTerm}`
+    }
+
+    if(mediaType !== 'all'){
+        url = url + `&media_type=${mediaType}`;
+    }
+    return this.http.get(url);
   }
 
   getPictureOfTheDay(): Observable<any> {

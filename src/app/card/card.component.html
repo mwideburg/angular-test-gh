@@ -27,16 +27,17 @@
 </div>
 
 <ng-template #noCards>
-  <div class="text-center">
-    <h2 class="text-3xl font-bold mb-4">{{ pictureOfTheDay.title }}</h2>
+  <div class="py-10">
+    <p class="text-6xl font-bold mb-4 text-gray-500" >Picture Of The Day</p>
     <img
       [src]="pictureOfTheDay.hdurl"
       alt="{{ pictureOfTheDay.title }}"
-      class="mx-auto mb-4"
+      class="mx-auto mb-4 rounded-lg overflow-hidden"
     />
+    <p>{{ pictureOfTheDay.title }}</p>
     <p>{{ pictureOfTheDay.explanation }}</p>
     <p class="text-sm text-gray-500">
-      Picture taken on: {{ pictureOfTheDay.date }}
+      {{ pictureOfTheDay.date }}
     </p>
   </div>
 </ng-template>

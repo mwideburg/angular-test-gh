@@ -10,6 +10,7 @@ import { NasaImageService } from './services/nasa-image.service';
 export class AppComponent {
   title = 'my-angular-app';
   showSearchBar: boolean = true;
+  imageUrl: string = "";
 
   constructor(private router: Router, private nasaImageService: NasaImageService) {}
 
@@ -20,6 +21,7 @@ export class AppComponent {
       }
     });
     this.nasaImageService.getPictureOfTheDay().subscribe((image) => {
+        this.imageUrl = image.hdurl
       this.nasaImageService.pictureOfTheDay.next(image)  
     })
   }

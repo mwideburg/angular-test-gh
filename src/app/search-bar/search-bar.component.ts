@@ -8,13 +8,20 @@ import { Router } from '@angular/router';
 })
 export class SearchBarComponent {
   searchTerm: string = '';
+  mediaType: string = 'image';
+  searchType: string = 'q';
 
-  constructor(private nasaImageService: NasaImageService, private router: Router) {}
+  constructor(
+    private nasaImageService: NasaImageService,
+    private router: Router
+  ) {}
 
   onSubmit(): void {
-    this.nasaImageService.getImage(this.searchTerm).subscribe((images) => {
-      this.nasaImageService.changeImages(images);
-    });
+    this.nasaImageService
+      .getImage(this.searchTerm, this.mediaType, this.searchType)
+      .subscribe((images) => {
+        this.nasaImageService.changeImages(images);
+      });
     this.router.navigate(['/cards']);
   }
 }

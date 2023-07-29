@@ -11,9 +11,10 @@ import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { CardDetailsComponent } from './card-details/card-details.component';
+import { FeaturedComponent } from './featured/featured.component';
 
 @NgModule({
-  declarations: [AppComponent, CardComponent, SearchBarComponent, CardDetailsComponent],
+  declarations: [AppComponent, CardComponent, SearchBarComponent, CardDetailsComponent, FeaturedComponent],
   imports: [
     BrowserModule,
     MatCardModule,
