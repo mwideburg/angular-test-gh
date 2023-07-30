@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { NasaImageService } from '../services/nasa-image.service';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
@@ -10,43 +10,47 @@ export class CardComponent implements OnInit {
   cards: any = [];
   noResults: boolean = false;
   noSearch: boolean = true;
-  search: string = "";
-  pictureOfTheDay: any = { hdurl: './assets/catching_some_sun.jpeg' };
+  search: string = '';
+  nextPageUrl: string = '';
   constructor(
     private nasaImageService: NasaImageService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    let reload = true;
     this.nasaImageService.currentImages.subscribe((images) => {
-      console.log(images);
-      this.parseImages(images);
-    });
+      //     this.cards = []
+      //   console.log(images);
+      //   this.parseImages(images);
+      const search = this.route.snapshot.params.search;
 
-    this.nasaImageService.pictureOfTheDay.subscribe((image: {}) => {
-      if (Object.keys(image).length) {
-        this.pictureOfTheDay = image;
+      if (search) {
+        this.search = search;
+        // Fetch images using the search parameter
+        this.nasaImageService
+          .getImagesByUrlSearch(search)
+          .subscribe((images: any) => {
+            if(images){
+                console.log(images);
+                this.cards = [];
+                this.nextPageUrl = images.collection.links[0].href;
+                this.parseImages(images);
+            }
+          });
       }
     });
-
     // Get the search parameter from the URL
-    const search = this.route.snapshot.params.search;
-
-    if (search) {
-      this.search = search;
-      // Fetch images using the search parameter
-      this.nasaImageService.getImagesByUrlSearch(search).subscribe((images) => {
-        console.log(images);
-        this.parseImages(images);
-      });
-    }
   }
 
   onCardClick(card: any) {
     // navigate to the detail page with the card id
     console.log('CRAD', card);
-    this.router.navigate(['/detail', this.search, card.id]);
+    const page = ~~(card.id / 100) + 1
+    const id = card.id - (page * 100 - 100)
+    console.log("PAGE", page, id)
+    this.router.navigate(['/detail', this.search + `&page=${page}`, id]);
   }
 
   parseImages(images: any) {
@@ -59,8 +63,8 @@ export class CardComponent implements OnInit {
       return;
     }
     console.log('Parsing images', images.collection);
-    let id = 0;
-    const cards: {}[] = [];
+    let id = this.cards.length;
+    // const cards: {}[] = [];
     images.collection.items.forEach((item: any) => {
       try {
         const nasaId = item.data[0].nasa_id;
@@ -85,17 +89,45 @@ export class CardComponent implements OnInit {
           mediaType,
           albumName,
         };
-        cards.push(card);
+        this.cards.push(card);
         id++;
       } catch (err) {
         console.log(err);
       }
     });
 
-    this.cards = cards;
+    // this.cards = cards;
   }
 
   replaceSpaces(url: string): string {
     return url.split(' ').join('%20');
+  }
+
+  loadMoreItems() {
+
+    this.nasaImageService
+      .loadNextPage(this.nextPageUrl)
+      .subscribe((response: any) => {
+        const nextLinkObj = response.collection.links.find(
+          (link: any) => link.rel === 'next'
+        );
+        this.nextPageUrl = nextLinkObj.href;
+
+        this.parseImages(response);
+      });
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    // Check if we are near the bottom of the container.
+    const pos =
+      (document.documentElement.scrollTop || document.body.scrollTop) +
+      document.documentElement.offsetHeight;
+    const max = document.documentElement.scrollHeight;
+
+    if (pos >= max - 100) {
+      // 100px from the bottom
+      this.loadMoreItems();
+    }
   }
 }

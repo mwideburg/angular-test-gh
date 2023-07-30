@@ -1,4 +1,4 @@
-<div *ngIf="cards.length > 0; else noCards">
+<div>
   <div class="container mx-auto px-4 flex justify-center">
     <div
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5"
@@ -25,18 +25,3 @@
     </div>
   </div>
 </div>
-
-<ng-template #noCards>
-  <div class="py-10">
-    <p class="text-4xl font-bold mb-4 text-gray-500" >Picture Of The Day:</p>
-    <img
-      [src]="pictureOfTheDay.hdurl"
-      class="mx-auto mb-4 rounded-lg overflow-hidden"
-    />
-    <p>{{ pictureOfTheDay.title }}</p>
-    <p>{{ pictureOfTheDay.explanation }}</p>
-    <p class="text-sm text-gray-500">
-      {{ pictureOfTheDay.date }}
-    </p>
-  </div>
-</ng-template>

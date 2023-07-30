@@ -47,6 +47,10 @@ export class NasaImageService {
     return this.http.get(url);
   }
 
+  loadNextPage(url: string): Observable<any>{
+    return this.http.get(url)
+  }
+
   getPictureOfTheDay(): Observable<any> {
     return this.http.get(
       'https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY'
