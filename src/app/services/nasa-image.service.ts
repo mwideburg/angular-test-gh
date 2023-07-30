@@ -48,7 +48,9 @@ export class NasaImageService {
   }
 
   loadNextPage(url: string): Observable<any>{
-    return this.http.get(url)
+    const search = url.split(".gov")[1]
+    const nextPageUrl = `${this.API_URL}` + search
+    return this.http.get(nextPageUrl)
   }
 
   getPictureOfTheDay(): Observable<any> {
