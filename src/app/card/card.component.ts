@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { NasaImageService } from '../services/nasa-image.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
@@ -10,6 +11,7 @@ export class CardComponent implements OnInit {
   cards: any = [];
   noResults: boolean = false;
   noSearch: boolean = true;
+  loadMore: boolean = true;
   search: string = '';
   nextPageUrl: string = '';
   constructor(
@@ -19,37 +21,44 @@ export class CardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    let reload = true;
-    this.nasaImageService.currentImages.subscribe((images) => {
-      //     this.cards = []
-      //   console.log(images);
-      //   this.parseImages(images);
-      const search = this.route.snapshot.params.search;
+    const search = this.route.snapshot.params.search;
 
-      if (search) {
-        this.search = search;
-        // Fetch images using the search parameter
-        this.nasaImageService
-          .getImagesByUrlSearch(search)
-          .subscribe((images: any) => {
-            if(images){
-                console.log(images);
-                this.cards = [];
-                this.nextPageUrl = images.collection.links[0].href;
-                this.parseImages(images);
-            }
-          });
-      }
-    });
-    // Get the search parameter from the URL
+    if (search) {
+      this.update();
+    }
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        // console.log(this.route.snapshot.params)
+        this.update();
+      });
+  }
+
+  update() {
+    const search = this.route.snapshot.params.search;
+
+    if (search) {
+      this.search = search;
+      // Fetch images using the search parameter
+      this.nasaImageService
+        .getImagesByUrlSearch(search)
+        .subscribe((images: any) => {
+          if (images) {
+            console.log(images);
+            this.cards = [];
+            this.nextPageUrl = images.collection.links[0].href;
+            this.parseImages(images);
+          }
+        });
+    }
   }
 
   onCardClick(card: any) {
     // navigate to the detail page with the card id
-    console.log('CRAD', card);
-    const page = ~~(card.id / 100) + 1
-    const id = card.id - (page * 100 - 100)
-    console.log("PAGE", page, id)
+    console.log('CARD', card);
+    const page = ~~(card.id / 100) + 1;
+    const id = card.id - (page * 100 - 100);
+    console.log('PAGE', page, id);
     this.router.navigate(['/detail', this.search + `&page=${page}`, id]);
   }
 
@@ -104,7 +113,6 @@ export class CardComponent implements OnInit {
   }
 
   loadMoreItems() {
-
     this.nasaImageService
       .loadNextPage(this.nextPageUrl)
       .subscribe((response: any) => {
@@ -120,14 +128,19 @@ export class CardComponent implements OnInit {
   @HostListener('window:scroll', [])
   onWindowScroll() {
     // Check if we are near the bottom of the container.
+    if (!this.loadMore) return;
     const pos =
       (document.documentElement.scrollTop || document.body.scrollTop) +
       document.documentElement.offsetHeight;
     const max = document.documentElement.scrollHeight;
-
+    localStorage.setItem('scrollPosition', `${pos}`);
     if (pos >= max - 100) {
       // 100px from the bottom
       this.loadMoreItems();
     }
+    this.loadMore = false;
+    setTimeout(() => {
+      this.loadMore = true;
+    }, 500);
   }
 }
