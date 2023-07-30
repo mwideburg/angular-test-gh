@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NasaImageService } from '../services/nasa-image.service';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { SharedDataService } from '../services/shared-data.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -20,32 +19,27 @@ export class CardDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private sharedDataService: SharedDataService
   ) {
     
   }
 
   ngOnInit(): void {
+    const search = this.route.snapshot.params.search
+    const id = this.route.snapshot.params.id
+    
+    this.nasaImageService.getImagesByUrlSearch(search).subscribe((images: any) => {
+        console.log('images', images.collection.items[id]);
+        this.cardData = images.collection.items[id].data[0]
+        console.log(this.cardData)
+        this.nasaImageService
+          .getCollection(images.collection.items[id].href)
+          .subscribe((collection) => {
+            const media = this.getMediaUrl(collection, this.cardData.media_type);
+            this.cardData.mediaUrl = media.mediaUrl;
 
-    this.sharedDataService.cardData$.subscribe(cardData => {
-      if (cardData) {
-        this.cardData = cardData;
-        console.log("CARD DATA", cardData)
-        this.nasaImageService.getCollection(cardData.collection).subscribe((collection) => {
-          const media = this.getMediaUrl(collection, this.cardData.mediaType)
-          this.cardData.mediaUrl = media.mediaUrl
-
-          this.additionalImages = collection
-        });
-      } else {
-        const id = this.route.snapshot.paramMap.get('id');
-        console.log("ID", id)
-        if (!id) return
-
-        // fetch data using id
-        this.nasaImageService.getAssetById(id)
-      }
-    });
+            this.additionalImages = collection;
+          });
+    })
   }
 
   goBack(): void {
@@ -85,5 +79,7 @@ export class CardDetailsComponent implements OnInit {
   replaceSpaces(url:string): string {
     return url.split(" ").join("%20")
   }
+
+  
 
 }

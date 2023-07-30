@@ -3,7 +3,7 @@
     (click)="goBack()">Back</button>
   <div class="mx-auto">
     <!-- Check if media is an image or video -->
-    <div *ngIf="cardData.mediaType === 'image'; else videoBlock">
+    <div *ngIf="cardData.media_type === 'image'; else videoBlock">
       <img class="w-full object-cover rounded" [src]="cardData.mediaUrl" alt="Card media">
     </div>
     <ng-template #videoBlock>

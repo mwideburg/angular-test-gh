@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NasaImageService } from '../services/nasa-image.service';
-import { Router } from '@angular/router';
-import { SharedDataService } from '../services/shared-data.service';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-card',
   templateUrl: './card.component.html',
@@ -11,11 +10,12 @@ export class CardComponent implements OnInit {
   cards: any = [];
   noResults: boolean = false;
   noSearch: boolean = true;
+  search: string = "";
   pictureOfTheDay: any = { hdurl: './assets/catching_some_sun.jpeg' };
   constructor(
     private nasaImageService: NasaImageService,
     private router: Router,
-    private sharedDataService: SharedDataService
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -29,14 +29,24 @@ export class CardComponent implements OnInit {
         this.pictureOfTheDay = image;
       }
     });
+
+    // Get the search parameter from the URL
+    const search = this.route.snapshot.params.search;
+
+    if (search) {
+      this.search = search;
+      // Fetch images using the search parameter
+      this.nasaImageService.getImagesByUrlSearch(search).subscribe((images) => {
+        console.log(images);
+        this.parseImages(images);
+      });
+    }
   }
 
   onCardClick(card: any) {
     // navigate to the detail page with the card id
     console.log('CRAD', card);
-
-    this.sharedDataService.updateCardData(card);
-    this.router.navigate(['/detail', card.id]);
+    this.router.navigate(['/detail', this.search, card.id]);
   }
 
   parseImages(images: any) {
@@ -49,10 +59,11 @@ export class CardComponent implements OnInit {
       return;
     }
     console.log('Parsing images', images.collection);
+    let id = 0;
     const cards: {}[] = [];
     images.collection.items.forEach((item: any) => {
       try {
-        const id = item.data[0].nasa_id;
+        const nasaId = item.data[0].nasa_id;
         const title = item.data[0].title;
         const description = item.data[0].description;
         const collection = item.href;
@@ -60,8 +71,11 @@ export class CardComponent implements OnInit {
         const createdAt = item.data[0].date_created;
         const image = this.replaceSpaces(item.links[0].href);
         const mediaType = item.data[0].media_type;
+        const albumName = item.data[0].album_name;
+
         const card = {
           id,
+          nasaId,
           title,
           description,
           image,
@@ -69,8 +83,10 @@ export class CardComponent implements OnInit {
           center,
           createdAt,
           mediaType,
+          albumName,
         };
         cards.push(card);
+        id++;
       } catch (err) {
         console.log(err);
       }
