@@ -12,8 +12,10 @@ export class PictureOfTheDayComponent implements OnInit {
 
   ngOnInit(): void {
     this.nasaImageService.getPictureOfTheDay().subscribe((image) => {
-      this.pictureOfTheDay = image;
-      this.nasaImageService.pictureOfTheDay.next(image);
+        if(image){
+            this.pictureOfTheDay = image;
+            this.nasaImageService.pictureOfTheDay.next(image);
+        }
     });
   }
 
