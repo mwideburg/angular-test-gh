@@ -22,6 +22,11 @@ export class SearchBarComponent {
       .subscribe((images) => {
         this.nasaImageService.changeImages(images);
       });
-    this.router.navigate(['/cards']);
+    const url = this.nasaImageService.createUrl(
+      this.searchTerm,
+      this.mediaType,
+      this.searchType
+    );
+    this.router.navigate(['/cards', url]);
   }
 }

@@ -12,9 +12,15 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { CardDetailsComponent } from './card-details/card-details.component';
 import { FeaturedComponent } from './featured/featured.component';
-
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 @NgModule({
-  declarations: [AppComponent, CardComponent, SearchBarComponent, CardDetailsComponent, FeaturedComponent],
+  declarations: [
+    AppComponent,
+    CardComponent,
+    SearchBarComponent,
+    CardDetailsComponent,
+    FeaturedComponent,
+  ],
   imports: [
     BrowserModule,
     MatCardModule,
@@ -22,9 +28,9 @@ import { FeaturedComponent } from './featured/featured.component';
     MatGridListModule,
     HttpClientModule,
     FormsModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
-  providers: [],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
