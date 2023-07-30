@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CardDetailsComponent } from './card-details/card-details.component';
 import { FeaturedComponent } from './featured/featured.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { PictureOfTheDayComponent } from './picture-of-the-day/picture-of-the-day.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +21,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     SearchBarComponent,
     CardDetailsComponent,
     FeaturedComponent,
+    PictureOfTheDayComponent,
   ],
   imports: [
     BrowserModule,

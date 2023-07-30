@@ -1,0 +1,12 @@
+<div class="py-10">
+  <p class="text-4xl font-bold mb-4 text-gray-500">Picture Of The Day:</p>
+  <img
+    [src]="pictureOfTheDay.hdurl"
+    class="mx-auto mb-4 rounded-lg overflow-hidden"
+  />
+  <p>{{ pictureOfTheDay.title }}</p>
+  <p>{{ pictureOfTheDay.explanation }}</p>
+  <p class="text-sm text-gray-500">
+    {{ pictureOfTheDay.date }}
+  </p>
+</div>
