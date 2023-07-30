@@ -137,8 +137,8 @@ export class CardComponent implements OnInit {
     if (pos >= max - 100) {
       // 100px from the bottom
       this.loadMoreItems();
+      this.loadMore = false;
     }
-    this.loadMore = false;
     setTimeout(() => {
       this.loadMore = true;
     }, 500);
