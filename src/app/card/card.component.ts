@@ -127,8 +127,9 @@ export class CardComponent implements OnInit {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    // Check if we are near the bottom of the container.
     if (!this.loadMore) return;
+
+    // Check if we are near the bottom of the container.
     const pos =
       (document.documentElement.scrollTop || document.body.scrollTop) +
       document.documentElement.offsetHeight;
