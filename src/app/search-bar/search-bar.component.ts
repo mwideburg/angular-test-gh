@@ -17,16 +17,12 @@ export class SearchBarComponent {
   ) {}
 
   onSubmit(): void {
-    this.nasaImageService
-      .getImage(this.searchTerm, this.mediaType, this.searchType)
-      .subscribe((images) => {
-        this.nasaImageService.changeImages(images);
-      });
     const url = this.nasaImageService.createUrl(
       this.searchTerm,
       this.mediaType,
       this.searchType
     );
+    
     this.router.navigate(['/cards', url]);
   }
 }
